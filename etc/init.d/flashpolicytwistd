@@ -1,0 +1,48 @@
+#! /bin/sh
+
+. /lib/lsb/init-functions
+
+#####################
+#BEGIN CONFIG SECTION
+
+#Location of daemon
+prog=/usr/local/sbin/flashpolicytwistd.py
+
+#Location of socket policy file
+policy=/usr/etc/flashpolicy.xml
+
+#Pid file to track start/stop of process
+pidfile=/var/run/flashpolicytwistd
+
+#END CONFIG SECTION
+#####################
+
+
+[ "$NETWORKING" = "no" ] && exit 0
+[ -f "$prog" ] || exit 1
+[ -f "$policy" ] || exit 1
+
+start() {
+    echo "Starting flashpolicytwistd"
+    twistd --logfile /dev/null --pidfile $pidfile -y $prog && echo "flashpolicytwistd started" && exit 0
+    exit 1
+}
+
+stop() {
+    echo -n "Stopping flashpolicyd: "
+    killproc -p $pidfile "$prog"
+    exit $?
+}
+    
+case "$1" in
+    start)
+    start
+    ;;
+    stop)
+    stop
+    ;;
+    *)
+    echo "Usage: flashpolicytwistd {start|stop|status|restart}"
+esac
+
+exit 1
