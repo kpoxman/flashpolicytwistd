@@ -6,30 +6,29 @@
 #BEGIN CONFIG SECTION
 
 #Location of daemon
-prog=/usr/local/sbin/flashpolicytwistd.py
+prog=/usr/sbin/flashpolicytwistd.py
 
 #Location of socket policy file
-policy=/usr/etc/flashpolicy.xml
+policy=/etc/flashpolicy.xml
 
 #Pid file to track start/stop of process
 pidfile=/var/run/flashpolicytwistd
 
+#Run as user
+runas=nobody
+
 #END CONFIG SECTION
 #####################
 
-
-[ "$NETWORKING" = "no" ] && exit 0
-[ -f "$prog" ] || exit 1
-[ -f "$policy" ] || exit 1
-
 start() {
     echo "Starting flashpolicytwistd"
-    twistd --logfile /dev/null --pidfile $pidfile -y $prog && echo "flashpolicytwistd started" && exit 0
+    twistd --logfile /dev/null --pidfile $pidfile -u nobody -y $prog && echo "flashpolicytwistd started" && exit 0
+    echo "Failed to start flashpolicytwistd"
     exit 1
 }
 
 stop() {
-    echo -n "Stopping flashpolicyd: "
+    echo "Stopping flashpolicytwistd"
     killproc -p $pidfile "$prog"
     exit $?
 }
@@ -42,7 +41,7 @@ case "$1" in
     stop
     ;;
     *)
-    echo "Usage: flashpolicytwistd {start|stop|status|restart}"
+    echo "Usage: flashpolicytwistd {start|stop}"
 esac
 
 exit 1
