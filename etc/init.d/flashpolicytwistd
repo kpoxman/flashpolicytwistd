@@ -8,9 +8,6 @@
 #Location of daemon
 prog=/usr/sbin/flashpolicytwistd.py
 
-#Location of socket policy file
-policy=/etc/flashpolicy.xml
-
 #Pid file to track start/stop of process
 pidfile=/var/run/flashpolicytwistd
 
@@ -22,7 +19,7 @@ runas=nobody
 
 start() {
     echo "Starting flashpolicytwistd"
-    twistd --logfile /dev/null --pidfile $pidfile -u nobody -y $prog && echo "flashpolicytwistd started" && exit 0
+    twistd --logfile /dev/null --pidfile $pidfile -u $runas -y $prog && echo "flashpolicytwistd started" && exit 0
     echo "Failed to start flashpolicytwistd"
     exit 1
 }
