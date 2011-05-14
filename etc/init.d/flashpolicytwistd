@@ -12,14 +12,15 @@ prog=/usr/sbin/flashpolicytwistd.py
 pidfile=/var/run/flashpolicytwistd
 
 #Run as user
-runas=nobody
+runasuser=nobody
+runasgroup=nogroup
 
 #END CONFIG SECTION
 #####################
 
 start() {
     echo "Starting flashpolicytwistd"
-    twistd --logfile /dev/null --pidfile $pidfile -u $runas -y $prog && echo "flashpolicytwistd started" && exit 0
+    twistd --logfile /dev/null --pidfile $pidfile --gid=$runasgroup --uid=$runasuser -y $prog && echo "flashpolicytwistd started" && exit 0
     echo "Failed to start flashpolicytwistd"
     exit 1
 }
