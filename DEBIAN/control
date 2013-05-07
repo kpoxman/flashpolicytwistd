@@ -1,0 +1,9 @@
+Package: flashpolicytwistd
+Version: 1.2
+Section: net
+Maintainer: Anton V. Belyaev <anton.belyaev@gmail.com>
+Architecture: all
+Depends: python-twisted
+Description: Flash policy server written using Python/Twisted
+ Simple flash policy server. Serves "/etc/flashpolicy.xml". 
+ Written in Python using Twisted framework. 
